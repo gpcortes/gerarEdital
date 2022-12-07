@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+sqlalchemy = "*"
+docxtpl = "*"
+envconfiguration = "*"
+pandas = "*"
+docx2pdf = "*"
+caworker = "*"
+pymysql = "*"
+
+[dev-packages]
+pylint = "*"
+yapf = "*"
+
+[requires]
+python_version = "3.7"

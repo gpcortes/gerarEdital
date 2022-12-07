@@ -1,0 +1,31 @@
+{
+    "python.defaultInterpreterPath": "/home/python/app/.venv/bin/python",
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.terminal.activateEnvironment": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "/bin/bash",
+            "icon": "terminal-bash"
+        },
+        "zsh": {
+            "path": "/bin/zsh"
+        },
+        "fish": {
+            "path": "/bin/fish"
+        },
+        "tmux": {
+            "path": "/bin/tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "/bin/pwsh",
+            "icon": "terminal-powershell"
+        }
+    },
+    "python.languageServer": "Default",
+    "python.linting.enabled": false,
+    "python.linting.pylintEnabled": false,
+    "python.formatting.yapfPath": "/home/python/app/.venv/bin/yapf",
+    "python.formatting.provider": "yapf",
+}
