@@ -27,8 +27,6 @@ ADD Pipfile ./
 # RUN pipenv sync
 RUN pipenv install --system
 
-COPY src/. /home/python/app
-
 WORKDIR /home/python/app
 
 CMD [ "python", "main.py" ]

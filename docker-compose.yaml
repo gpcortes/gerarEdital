@@ -19,6 +19,6 @@ services:
             - CAMUNDA_DOMAINS_DB=${CAMUNDA_DOMAINS_DB}
             - CAMUNDA_DOMAINS_PASS=${CAMUNDA_DOMAINS_PASS}
         volumes:
-            # - ./src:/home/python/app
+            - ./src:/home/python/app
             - /mnt/docs/Sites/cett-ti/documentLibrary/Processos/Ensino/gerarEdital/Editais:/home/appuser/app/outputs:rw
             - /mnt/docs/Sites/cett-ti/documentLibrary/Processos/Ensino/gerarEdital/Templates:/home/appuser/app/templates:ro
