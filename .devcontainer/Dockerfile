@@ -19,9 +19,10 @@ WORKDIR /home/python/app
 
 ENV PIPENV_VENV_IN_PROJECT=True
 ENV PIPENV_SITE_PACKAGES=True
-ENV PATH="/.venv/bin:$PATH"
+ENV PATH="~/.venv/bin:$PATH"
 
-ADD Pipfile.lock Pipfile ./
+ADD Pipfile.lock ./
+ADD Pipfile ./
 
 RUN pipenv sync
 
