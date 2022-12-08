@@ -7,7 +7,7 @@ services:
             dockerfile: ./Dockerfile
         environment:
             - NODE_ENV=production
-            - TOPIC=GerarDocumentosDaBolsaTask
+            - TOPIC=testedeDOC
             - ENG_REST_URL=${CAMUNDA_URL}
             - ENG_REST_USERNAME=${CAMUNDA_USERNAME}
             - ENG_REST_PASSWORD=${CAMUNDA_PASSWORD}
