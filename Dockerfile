@@ -27,9 +27,8 @@ ADD Pipfile ./
 # RUN pipenv sync
 RUN pipenv install --system
 
-WORKDIR /home/python/app
+COPY app/. /home/python/app
 
-RUN mkdir templates
-RUN mkdir outputs
+WORKDIR /home/python/app
 
 CMD [ "python", "main.py" ]
