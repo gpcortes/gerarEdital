@@ -58,7 +58,7 @@ def criaredital():
     #turmas_planejadas['previsao_abertura_edital'] = datetime.strftime(pd.Timestamp(turmas_planejadas['previsao_abertura_edital'].values[0]),'%Y-%m-%d')
     #turmas_planejadas = turmas_planejadas_edital['num_edital_id'].groupby(by='num_edital_id')
 
-    locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+    # locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
     turmas_planejadas['previsao_abertura_edital_estenso'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
