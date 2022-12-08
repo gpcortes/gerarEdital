@@ -24,7 +24,6 @@ ENV PATH="~/.venv/bin:$PATH"
 ADD Pipfile.lock ./
 ADD Pipfile ./
 
-# RUN pipenv sync
 RUN pipenv install --system
 
 WORKDIR /home/python/app
