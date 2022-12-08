@@ -30,7 +30,7 @@ def unique(list1):
 def get_engine():
     string_connection = "mysql+pymysql://{user}:{password}@{host}:{port}/{database}".format(
         user=config.CAMUNDA_DOMAINS_USER,  # type: ignore
-        password=config.CAMUNDA_DOMAINS_PASS,  # type: ignore
+        password=quote(config.CAMUNDA_DOMAINS_PASS),  # type: ignore
         host=config.CAMUNDA_DOMAINS_HOST,  # type: ignore
         port=config.CAMUNDA_DOMAINS_PORT,  # type: ignore
         database=config.CAMUNDA_DOMAINS_DB  # type: ignore
