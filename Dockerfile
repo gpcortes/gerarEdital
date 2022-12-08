@@ -29,4 +29,7 @@ RUN pipenv install --system
 
 WORKDIR /home/python/app
 
+RUN mkdir templates
+RUN mkdir outputs
+
 CMD [ "python", "main.py" ]
