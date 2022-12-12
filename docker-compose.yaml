@@ -19,6 +19,7 @@ services:
             - CAMUNDA_DOMAINS_DB=${CAMUNDA_DOMAINS_DB}
             - CAMUNDA_DOMAINS_PASS=${CAMUNDA_DOMAINS_PASS}
         volumes:
+            - ./src:/home/python/app
             - ${ACS_DOCS_PATH}/Ensino/gerarEdital/Editais:/home/python/app/outputs
             - ${ACS_DOCS_PATH}/Ensino/gerarEdital/Templates:/home/python/app/templates
 
