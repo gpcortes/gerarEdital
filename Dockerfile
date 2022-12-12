@@ -26,9 +26,6 @@ ADD Pipfile ./
 
 RUN pipenv install --system
 
-RUN mkdir /home/python/app/templates
-RUN mkdir /home/python/app/outputs
-
 WORKDIR /home/python/app
 
 CMD [ "python", "main.py" ]
