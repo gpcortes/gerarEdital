@@ -10,6 +10,7 @@ ENV PYTHONUNBUFFERED=1
 RUN useradd -ms /bin/bash python
 
 RUN apt update && apt install git -y
+RUN apt-get install -y libreoffice
 
 RUN pip install pipenv
 

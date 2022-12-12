@@ -6,11 +6,47 @@ from sqlalchemy import create_engine
 import pandas as pd
 from docxtpl import DocxTemplate
 from datetime import datetime
-import locale
 from sqlalchemy import create_engine
-from docx2pdf import convert
 import json
 import envconfiguration as config
+import subprocess
+import re
+import os
+import sys
+
+
+def convert_to(source, folder, timeout=None):
+    args = [
+        libreoffice_exec(), '--headless', '--convert-to', 'pdf', source,
+        '--outdir', folder
+    ]
+
+    process = subprocess.run(args,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE,
+                             timeout=timeout)
+    filename = re.search('-> (.*?) using filter', process.stdout.decode())
+
+    if filename is None:
+        raise LibreOfficeError(process.stdout.decode())
+    else:
+        return os.path.basename(filename.group(1))
+
+
+def libreoffice_exec():
+    # TODO Provide support for more platforms
+    if sys.platform == 'darwin':
+        return '/Applications/LibreOffice.app/Contents/MacOS/soffice'
+    elif sys.platform == 'linux':
+        return 'soffice'
+    else:
+        return 'libreoffice'
+
+
+class LibreOfficeError(Exception):
+
+    def __init__(self, output):
+        self.output = output
 
 
 def unique(list1):
@@ -59,12 +95,31 @@ def criaredital():
     #turmas_planejadas = turmas_planejadas_edital['num_edital_id'].groupby(by='num_edital_id')
 
     # locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-    turmas_planejadas['previsao_abertura_edital_estenso'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_ini_edit'].values[0]),'%d de %B de %Y')
-    turmas_planejadas['previsao_fechamento_edital_estenso'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_fim_edit'].values[0]),'%d de %B de %Y')
-    turmas_planejadas['previsao_abertura_edital_normal'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_ini_edit'].values[0]),'%d/%m/%Y')
-    turmas_planejadas['previsao_fechamento_edital_normal'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_fim_edit'].values[0]),'%d/%m/%Y')
-    turmas_planejadas['previsao_inicio_inscricao'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_ini_insc'].values[0]),'%d/%m/%Y')
-    turmas_planejadas['previsao_fim_inscricao'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_fim_insc'].values[0]),'%d/%m/%Y')
+    turmas_planejadas['previsao_abertura_edital_estenso'] = datetime.strftime(
+        pd.Timestamp(
+            turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
+        '%d de %B de %Y')
+    turmas_planejadas[
+        'previsao_fechamento_edital_estenso'] = datetime.strftime(
+            pd.Timestamp(
+                turmas_planejadas['dt_fim_edit'].values[0]),  # type: ignore
+            '%d de %B de %Y')
+    turmas_planejadas['previsao_abertura_edital_normal'] = datetime.strftime(
+        pd.Timestamp(
+            turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
+        '%d/%m/%Y')
+    turmas_planejadas['previsao_fechamento_edital_normal'] = datetime.strftime(
+        pd.Timestamp(
+            turmas_planejadas['dt_fim_edit'].values[0]),  # type: ignore
+        '%d/%m/%Y')
+    turmas_planejadas['previsao_inicio_inscricao'] = datetime.strftime(
+        pd.Timestamp(
+            turmas_planejadas['dt_ini_insc'].values[0]),  # type: ignore
+        '%d/%m/%Y')
+    turmas_planejadas['previsao_fim_inscricao'] = datetime.strftime(
+        pd.Timestamp(
+            turmas_planejadas['dt_fim_insc'].values[0]),  # type: ignore
+        '%d/%m/%Y')
     content = json.loads(turmas_planejadas.to_json(orient='values'))
     columns = [{
         "name": "id",
@@ -225,7 +280,7 @@ def criaredital():
         docx = f"/home/python/app/outputs/edital_{resposta[r][0]['escola']}.docx"
         print(docx)
         doc1.save(docx)
-        convert(
+        convert_to(
             docx,
             f"/home/python/app/outputs/edital_{resposta[r][0]['escola']}.pdf")
 
