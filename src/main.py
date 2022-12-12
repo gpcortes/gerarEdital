@@ -59,31 +59,12 @@ def criaredital():
     #turmas_planejadas = turmas_planejadas_edital['num_edital_id'].groupby(by='num_edital_id')
 
     # locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-    turmas_planejadas['previsao_abertura_edital_estenso'] = datetime.strftime(
-        pd.Timestamp(
-            turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
-        '%d de %B de %Y')
-    turmas_planejadas[
-        'previsao_fechamento_edital_estenso'] = datetime.strftime(
-            pd.Timestamp(
-                turmas_planejadas['dt_fim_edit'].values[0]),  # type: ignore
-            '%d de %B de %Y')
-    turmas_planejadas['previsao_abertura_edital_normal'] = datetime.strftime(
-        pd.Timestamp(
-            turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
-        '%d/%m/%Y')
-    turmas_planejadas['previsao_fechamento_edital_normal'] = datetime.strftime(
-        pd.Timestamp(
-            turmas_planejadas['dt_fim_edit'].values[0]),  # type: ignore
-        '%d/%m/%Y')
-    turmas_planejadas['previsao_inicio_inscricao'] = datetime.strftime(
-        pd.Timestamp(
-            turmas_planejadas['dt_ini_insc'].values[0]),  # type: ignore
-        '%d/%m/%Y')
-    turmas_planejadas['previsao_fim_inscricao'] = datetime.strftime(
-        pd.Timestamp(
-            turmas_planejadas['dt_fim_insc'].values[0]),  # type: ignore
-        '%d/%m/%Y')
+    turmas_planejadas['previsao_abertura_edital_estenso'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_ini_edit'].values[0]),'%d de %B de %Y')
+    turmas_planejadas['previsao_fechamento_edital_estenso'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_fim_edit'].values[0]),'%d de %B de %Y')
+    turmas_planejadas['previsao_abertura_edital_normal'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_ini_edit'].values[0]),'%d/%m/%Y')
+    turmas_planejadas['previsao_fechamento_edital_normal'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_fim_edit'].values[0]),'%d/%m/%Y')
+    turmas_planejadas['previsao_inicio_inscricao'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_ini_insc'].values[0]),'%d/%m/%Y')
+    turmas_planejadas['previsao_fim_inscricao'] = datetime.strftime(pd.Timestamp(turmas_planejadas['dt_fim_insc'].values[0]),'%d/%m/%Y')
     content = json.loads(turmas_planejadas.to_json(orient='values'))
     columns = [{
         "name": "id",
