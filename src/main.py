@@ -97,7 +97,7 @@ def criaredital():
     # locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
     default_date = datetime.strftime(datetime(1900, 1, 1), '%d/%m/%Y')
-    agora = datetime.strftime(datetime.now(), '%Y-%m-%d_%H-%M-%S')
+
     turmas_planejadas['previsao_abertura_edital_estenso'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
@@ -279,6 +279,7 @@ def criaredital():
     # print(resposta.items)
 
     for r in resposta:
+        agora = datetime.strftime(datetime.now(), '%Y-%m-%d_%H-%M-%S-%f')
         print(type(r))
         print(resposta[r])
         print(r)
