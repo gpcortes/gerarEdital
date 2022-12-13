@@ -292,7 +292,7 @@ def criaredital():
         doc1.save(docx)
         convert_to(
             docx,
-            f"/home/python/app/outputs/edital_{resposta[r][0]['escola']}_{agora}.pdf"
+            f"/home/python/app/outputs"
         )
 
 
