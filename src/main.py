@@ -285,7 +285,10 @@ def criaredital():
     # print(resposta.items)
 
     for r in resposta:
-        agora = datetime.strftime(datetime.now(), '%Y-%m-%d_%H-%M-%S-%f')
+        date_time_now = datetime.now()
+        agora = datetime.strftime(date_time_now, '%Y-%m-%d_%H-%M-%S-%f')
+        ano_edital = date_time_now.year
+        output_path = f"/home/python/app/outputs/{ano_edital}/{resposta[r][0]['escola']}"
         print(type(r))
         print(resposta[r])
         print(r)
@@ -293,13 +296,10 @@ def criaredital():
         print(doc1)
         doc1.render({'turmas_planejadas': resposta[r]})
         print(doc1)
-        docx = f"/home/python/app/outputs/edital_{resposta[r][0]['escola']}_{agora}.docx"
+        docx = f"{output_path}/edital_{resposta[r][0]['escola']}_{agora}.docx"
         print(docx)
         doc1.save(docx)
-        convert_to(
-            docx,
-            f"/home/python/app/outputs"
-        )
+        convert_to(docx, output_path)
 
 
 if __name__ == '__main__':
