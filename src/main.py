@@ -77,16 +77,16 @@ def get_engine():
 def criaredital():
 
     turmas_planejadas = pd.read_sql_query("""
-    SELECT tpo.*, esc.escola, esc.email, esc.telefone, um.municipio, md.modalidade, tc.tipo, cr.curso, ee.dt_ini_edit, ee.dt_fim_edit, ee.dt_ini_insc, ee.dt_fim_insc, ee.num_edital
-    from Turmas_planejado_orcado tpo 
-	inner JOIN escolas esc ON esc.id = tpo.escola_id
-	left JOIN udepi_municipio um ON um.escola_id = esc.id
-	INNER JOIN modalidade md ON md.id = tpo.modalidade_id
-	INNER JOIN tipo_curso tc ON tc.id = tpo.tipo_curso_id
-	INNER JOIN cursos cr ON cr.id = tpo.curso_id
-	INNER JOIN edital_ensino ee ON ee.id = tpo.num_edital_id
-	WHERE ee.`status`='0'AND ee.dt_ini_edit and ee.dt_fim_edit AND ee.dt_ini_insc AND ee.dt_fim_insc is NOT null
-
+        SELECT
+        tpo.*, esc.escola, um.municipio, esc.email, esc.telefone, md.modalidade, tc.tipo, cr.curso, ee.dt_ini_edit, ee.dt_fim_edit, ee.dt_ini_insc, ee.dt_fim_insc, ee.num_edital
+        from Turmas_planejado_orcado tpo 
+        inner JOIN escolas esc ON esc.id = tpo.escola_id
+        left JOIN udepi_municipio um ON um.escola_id = esc.id
+        INNER JOIN modalidade md ON md.id = tpo.modalidade_id
+        INNER JOIN tipo_curso tc ON tc.id = tpo.tipo_curso_id
+        INNER JOIN cursos cr ON cr.id = tpo.curso_id
+        INNER JOIN edital_ensino ee ON ee.id = tpo.num_edital_id
+        WHERE ee.`status`='0'AND ee.dt_ini_edit and ee.dt_fim_edit AND ee.dt_ini_insc AND ee.dt_fim_insc is NOT null
     """,
                                           con=get_engine())
     #turmas_planejadas = turmas_planejadas[turmas_planejadas['id']==id_]
@@ -288,7 +288,11 @@ def criaredital():
         date_time_now = datetime.now()
         agora = datetime.strftime(date_time_now, '%Y-%m-%d_%H-%M-%S-%f')
         ano_edital = date_time_now.year
+        
         output_path = f"/home/python/app/outputs/{ano_edital}/{resposta[r][0]['escola']}"
+        if not os.path.isdir(output_path):
+            os.makedirs(output_path)
+            
         print(type(r))
         print(resposta[r])
         print(r)
