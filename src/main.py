@@ -256,7 +256,7 @@ def criaredital():
     }]
 
     mappedJson = []
-    print(len(content[0]), len(columns))
+    # print(len(content[0]), len(columns))
     for cont in range(len(content)):
         mappedObject = {}
         for col in range(len(columns)):
@@ -279,7 +279,7 @@ def criaredital():
             if turma["num_edital_id"] == tipo:
                 resposta[tipo].append(turma)
 
-    print(resposta)
+    # print(resposta)
     # print(resposta.values)
     # print(resposta.keys)
     # print(resposta.items)
@@ -293,17 +293,19 @@ def criaredital():
         if not os.path.isdir(output_path):
             os.makedirs(output_path)
             
-        print(type(r))
-        print(resposta[r])
-        print(r)
+        # print(type(r))
+        # print(resposta[r])
+        # print(r)
         doc1 = DocxTemplate("/home/python/app/templates/edital_template.docx")
-        print(doc1)
+        # print(doc1)
         doc1.render({'turmas_planejadas': resposta[r]})
-        print(doc1)
+        # print(doc1)
         docx = f"{output_path}/edital_{resposta[r][0]['escola']}_{agora}.docx"
-        print(docx)
+        # print(docx)
         doc1.save(docx)
-        convert_to(docx, output_path)
+        pdf_name = convert_to(docx, output_path)
+        pdf_path = os.path.join(output_path, pdf_name)
+        print(f'Aquivo de edital gerado: "{pdf_path}"')
 
 
 if __name__ == '__main__':
