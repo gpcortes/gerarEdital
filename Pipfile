@@ -15,6 +15,7 @@ pymysql = "*"
 [dev-packages]
 pylint = "*"
 yapf = "*"
+pylance = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

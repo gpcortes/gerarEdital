@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/vscode/devcontainers/python:3.7-buster
+FROM mcr.microsoft.com/vscode/devcontainers/python:3.8-buster
 
 # Setup env
 ENV LANG C.UTF-8
@@ -25,6 +25,6 @@ ENV PATH="~/.venv/bin:$PATH"
 ADD Pipfile.lock ./
 ADD Pipfile ./
 
-RUN pipenv sync
+RUN pipenv install
 
 CMD [ "tail", "-f", "/dev/null" ]
