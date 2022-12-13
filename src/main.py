@@ -95,31 +95,40 @@ def criaredital():
     #turmas_planejadas = turmas_planejadas_edital['num_edital_id'].groupby(by='num_edital_id')
 
     # locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+
+    default_date = datetime.strftime(datetime(1900, 1, 1), '%d/%m/%Y')
+    agora = datetime.strftime(datetime.now(), '%Y-%m-%d_%H-%M-%S')
     turmas_planejadas['previsao_abertura_edital_estenso'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
-        '%d de %B de %Y')
+        '%d de %B de %Y') if turmas_planejadas['dt_ini_edit'].values[
+            0] is not None else default_date
     turmas_planejadas[
         'previsao_fechamento_edital_estenso'] = datetime.strftime(
             pd.Timestamp(
                 turmas_planejadas['dt_fim_edit'].values[0]),  # type: ignore
-            '%d de %B de %Y')
+            '%d de %B de %Y') if turmas_planejadas['dt_ini_edit'].values[
+                0] is not None else default_date
     turmas_planejadas['previsao_abertura_edital_normal'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
-        '%d/%m/%Y')
+        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[
+            0] is not None else default_date
     turmas_planejadas['previsao_fechamento_edital_normal'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_fim_edit'].values[0]),  # type: ignore
-        '%d/%m/%Y')
+        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[
+            0] is not None else default_date
     turmas_planejadas['previsao_inicio_inscricao'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_ini_insc'].values[0]),  # type: ignore
-        '%d/%m/%Y')
+        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[
+            0] is not None else default_date
     turmas_planejadas['previsao_fim_inscricao'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_fim_insc'].values[0]),  # type: ignore
-        '%d/%m/%Y')
+        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[
+            0] is not None else default_date
     content = json.loads(turmas_planejadas.to_json(orient='values'))
     columns = [{
         "name": "id",
@@ -277,12 +286,13 @@ def criaredital():
         print(doc1)
         doc1.render({'turmas_planejadas': resposta[r]})
         print(doc1)
-        docx = f"/home/python/app/outputs/edital_{resposta[r][0]['escola']}.docx"
+        docx = f"/home/python/app/outputs/edital_{resposta[r][0]['escola']}_{agora}.docx"
         print(docx)
         doc1.save(docx)
         convert_to(
             docx,
-            f"/home/python/app/outputs/edital_{resposta[r][0]['escola']}.pdf")
+            f"/home/python/app/outputs/edital_{resposta[r][0]['escola']}_{agora}.pdf"
+        )
 
 
 if __name__ == '__main__':
