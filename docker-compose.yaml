@@ -7,7 +7,6 @@ services:
             context: .
             dockerfile: ./Dockerfile
         environment:
-            - NODE_ENV=production
             - TOPIC=testedeDOC
             - ENG_REST_URL=${CAMUNDA_URL}
             - ENG_REST_USERNAME=${CAMUNDA_USERNAME}
@@ -20,8 +19,8 @@ services:
             - CAMUNDA_DOMAINS_PASS=${CAMUNDA_DOMAINS_PASS}
         volumes:
             - ./src:/home/python/app
-            - ${ACS_DOCS_PATH}/Ensino/gerarEdital/Editais:/home/python/app/outputs
-            - ${ACS_DOCS_PATH}/Ensino/gerarEdital/Templates:/home/python/app/templates
+            - ${ACS_DOCS_PATH}/Ensino/gerarEdital/Editais:/home/python/app/outputs:rw
+            - ${ACS_DOCS_PATH}/Ensino/gerarEdital/Templates:/home/python/app/templates:ro
 
 networks:
   default:
