@@ -78,7 +78,7 @@ def criaredital():
 
     turmas_planejadas = pd.read_sql_query("""
         SELECT
-        tpo.*, esc.escola, um.municipio, md.modalidade, tc.tipo, cr.curso, ee.dt_ini_edit, ee.dt_fim_edit, ee.dt_ini_insc, ee.dt_fim_insc, ee.num_edital
+        tpo.*, esc.escola, um.municipio, esc.email, esc.telefone, md.modalidade, tc.tipo, cr.curso, ee.dt_ini_edit, ee.dt_fim_edit, ee.dt_ini_insc, ee.dt_fim_insc, ee.num_edital
         from Turmas_planejado_orcado tpo 
         inner JOIN escolas esc ON esc.id = tpo.escola_id
         left JOIN udepi_municipio um ON um.escola_id = esc.id
@@ -207,6 +207,12 @@ def criaredital():
         "type": "string"
     }, {
         "name": "municipio",
+        "type": "string"
+    }, {
+        "name": "email",
+        "type": "string"
+    }, {
+        "name": "telefone",
         "type": "string"
     }, {
         "name": "modalidade",
