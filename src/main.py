@@ -288,11 +288,14 @@ def criaredital():
         date_time_now = datetime.now()
         agora = datetime.strftime(date_time_now, '%Y-%m-%d_%H-%M-%S-%f')
         ano_edital = date_time_now.year
+
+        BASE_DIR = '/home/python/app/outputs'
+        ACS_PATH = f"/{ano_edital}/{resposta[r][0]['escola']}"
+        OUTPUT_PATH = os.path.join(BASE_DIR, ACS_PATH)
         
-        output_path = f"/home/python/app/outputs/{ano_edital}/{resposta[r][0]['escola']}"
-        if not os.path.isdir(output_path):
-            os.makedirs(output_path)
-            
+        if not os.path.isdir(OUTPUT_PATH):
+            os.makedirs(OUTPUT_PATH)
+
         # print(type(r))
         # print(resposta[r])
         # print(r)
@@ -300,12 +303,14 @@ def criaredital():
         # print(doc1)
         doc1.render({'turmas_planejadas': resposta[r]})
         # print(doc1)
-        docx = f"{output_path}/edital_{resposta[r][0]['escola']}_{agora}.docx"
+        docx = f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{agora}.docx"
         # print(docx)
         doc1.save(docx)
-        pdf_name = convert_to(docx, output_path)
-        pdf_path = os.path.join(output_path, pdf_name)
-        print(f'Aquivo de edital gerado: "{pdf_path}"')
+        PDF_NAME = convert_to(docx, OUTPUT_PATH)
+        PDF_PATH = os.path.join(ACS_PATH, PDF_NAME)
+        print(f'Aquivo de edital gerado: "{PDF_PATH}"')
+        
+        ### Rotina para atualizar o path do edital em PDF ###
 
 
 if __name__ == '__main__':
