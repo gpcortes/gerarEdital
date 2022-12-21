@@ -8,7 +8,6 @@ sqlalchemy = "*"
 docxtpl = "*"
 envconfiguration = "*"
 pandas = "*"
-docx2pdf = "*"
 caworker = "*"
 pymysql = "*"
 

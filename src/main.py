@@ -2,11 +2,11 @@ from caworker import Worker
 import time
 import json
 from urllib.parse import quote
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData, Table
+from sqlalchemy.sql import text
 import pandas as pd
 from docxtpl import DocxTemplate
 from datetime import datetime
-from sqlalchemy import create_engine
 import json
 import envconfiguration as config
 import subprocess
@@ -14,6 +14,7 @@ import re
 import os
 import sys
 import locale
+
 
 def convert_to(source, folder, timeout=None):
     args = [
@@ -78,7 +79,7 @@ def criaredital():
 
     turmas_planejadas = pd.read_sql_query("""
         SELECT
-        tpo.*, esc.escola, um.municipio, esc.email, esc.telefone, md.modalidade, tc.tipo, cr.curso, ee.dt_ini_edit, ee.dt_fim_edit, ee.dt_ini_insc, ee.dt_fim_insc, ee.num_edital
+        tpo.*, esc.escola, um.municipio, esc.email, esc.telefone, md.modalidade, tc.tipo, cr.curso, ee.id, ee.dt_ini_edit, ee.dt_fim_edit, ee.dt_ini_insc, ee.dt_fim_insc, ee.num_edital
         from Turmas_planejado_orcado tpo 
         inner JOIN escolas esc ON esc.id = tpo.escola_id
         left JOIN udepi_municipio um ON um.escola_id = esc.id
@@ -292,7 +293,7 @@ def criaredital():
         BASE_DIR = '/home/python/app/outputs'
         ACS_PATH = f"/{ano_edital}/{resposta[r][0]['escola']}"
         OUTPUT_PATH = os.path.join(BASE_DIR, ACS_PATH)
-        
+
         if not os.path.isdir(OUTPUT_PATH):
             os.makedirs(OUTPUT_PATH)
 
@@ -307,10 +308,20 @@ def criaredital():
         # print(docx)
         doc1.save(docx)
         PDF_NAME = convert_to(docx, OUTPUT_PATH)
-        PDF_PATH = os.path.join(ACS_PATH, PDF_NAME)
+        PDF_PATH = os.path.join('editais', ACS_PATH, PDF_NAME)
         print(f'Aquivo de edital gerado: "{PDF_PATH}"')
-        
+
         ### Rotina para atualizar o path do edital em PDF ###
+        engine = get_engine()
+        connection = engine.connect()
+        statement = text(f"""
+                        UPDATE edital_ensino
+                        SET
+                            pdf = '{PDF_PATH}'
+                        WHERE
+                            id = {r}
+                        """)
+        connection.execute(statement=statement)
 
 
 if __name__ == '__main__':
@@ -322,10 +333,12 @@ if __name__ == '__main__':
         tasks = worker.fetch_tasks()
 
         for task in tasks:
-
-            criaredital()
-            print("entrei dentro do worker")
-            worker.complete_task(task_id=task.id_, variables={})
-
-            print('Inserção realizada com sucesso!')
+            try:
+                criaredital()
+                print("entrei dentro do worker")
+                worker.complete_task(task_id=task.id_, variables={})
+                print('Inserção realizada com sucesso!')
+            except:
+                print('Erro ao gerar edital')
+                
         time.sleep(5)
