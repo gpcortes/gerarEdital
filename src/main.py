@@ -322,6 +322,7 @@ def criaredital():
                             id = {r}
                         """)
         connection.execute(statement=statement)
+        connection.close()
 
 
 if __name__ == '__main__':
