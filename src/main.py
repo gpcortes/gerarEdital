@@ -334,12 +334,9 @@ if __name__ == '__main__':
         tasks = worker.fetch_tasks()
 
         for task in tasks:
-            try:
-                criaredital()
-                print("entrei dentro do worker")
-                worker.complete_task(task_id=task.id_, variables={})
-                print('Inserção realizada com sucesso!')
-            except:
-                print('Erro ao gerar edital')
+            criaredital()
+            print("entrei dentro do worker")
+            worker.complete_task(task_id=task.id_, variables={})
+            print('Inserção realizada com sucesso!')
                 
         time.sleep(5)
