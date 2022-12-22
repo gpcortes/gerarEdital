@@ -295,6 +295,7 @@ def criaredital():
         OUTPUT_PATH = os.path.join(BASE_DIR, ACS_PATH)
 
         if not os.path.exists(OUTPUT_PATH):
+            print(OUTPUT_PATH)
             os.umask(0)
             os.makedirs(OUTPUT_PATH, mode=0o777)
 
