@@ -294,7 +294,7 @@ def criaredital():
         ACS_PATH = f"/{ano_edital}/{resposta[r][0]['escola']}"
         OUTPUT_PATH = os.path.join(BASE_DIR, ACS_PATH)
 
-        if not os.path.isdir(OUTPUT_PATH):
+        if not os.path.exists(OUTPUT_PATH):
             os.makedirs(OUTPUT_PATH)
 
         # print(type(r))
@@ -338,5 +338,5 @@ if __name__ == '__main__':
             print("entrei dentro do worker")
             worker.complete_task(task_id=task.id_, variables={})
             print('Inserção realizada com sucesso!')
-                
+
         time.sleep(5)
