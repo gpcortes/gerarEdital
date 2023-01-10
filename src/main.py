@@ -305,7 +305,7 @@ def criaredital():
         # print(doc1)
         doc1.render({'turmas_planejadas': resposta[r]})
         # print(doc1)
-        docx = f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{agora}.docx"
+        docx = f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx"
         # print(docx)
         doc1.save(docx)
         PDF_NAME = convert_to(docx, OUTPUT_PATH)
