@@ -225,6 +225,9 @@ def criaredital():
         "name": "curso",
         "type": "string"
     }, {
+        "name": "num_edital",
+        "type": "integer"
+    }, {
         "name": "dt_ini_edit",
         "type": "string"
     }, {
@@ -236,9 +239,6 @@ def criaredital():
     }, {
         "name": "dt_fim_insc",
         "type": "string"
-    }, {
-        "name": "num_edital",
-        "type": "integer"
     }, {
         "name": "previsao_abertura_edital_estenso",
         "type": "string"
@@ -327,17 +327,18 @@ def criaredital():
 
 
 if __name__ == '__main__':
-    worker = Worker()
-    print('Worker started')
-    get_engine()
+    # worker = Worker()
+    # print('Worker started')
+    # get_engine()
 
-    while True:
-        tasks = worker.fetch_tasks()
+    # while True:
+    #     tasks = worker.fetch_tasks()
 
-        for task in tasks:
-            criaredital()
-            print("entrei dentro do worker")
-            worker.complete_task(task_id=task.id_, variables={})
-            print('Inserção realizada com sucesso!')
+    #     for task in tasks:
+    #         criaredital()
+    #         print("entrei dentro do worker")
+    #         worker.complete_task(task_id=task.id_, variables={})
+    #         print('Inserção realizada com sucesso!')
 
-        time.sleep(5)
+    #     time.sleep(5)
+    criaredital()
