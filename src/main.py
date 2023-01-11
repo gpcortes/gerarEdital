@@ -351,19 +351,17 @@ def criaredital():
 
 
 if __name__ == '__main__':
-    # worker = Worker()
-    # print('Worker started')
-    # get_engine()
+    worker = Worker()
+    print('Worker started')
+    get_engine()
 
-    # while True:
-    #     tasks = worker.fetch_tasks()
+    while True:
+        tasks = worker.fetch_tasks()
 
-    #     for task in tasks:
-    #         criaredital()
-    #         print("entrei dentro do worker")
-    #         worker.complete_task(task_id=task.id_, variables={})
-    #         print('Inserção realizada com sucesso!')
+        for task in tasks:
+            criaredital()
+            print("entrei dentro do worker")
+            worker.complete_task(task_id=task.id_, variables={})
+            print('Inserção realizada com sucesso!')
 
-    #     time.sleep(5)
-
-    criaredital()
+        time.sleep(5)
