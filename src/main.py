@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.sql import text
 import pandas as pd
 from docxtpl import DocxTemplate
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 import envconfiguration as config
 import subprocess
@@ -79,7 +79,7 @@ def criaredital():
 
     turmas_planejadas = pd.read_sql_query("""
         SELECT
-        tpo.*, esc.escola, um.municipio, esc.email, esc.telefone, md.modalidade, tc.tipo, cr.curso, ee.id, ee.dt_ini_edit, ee.dt_fim_edit, ee.dt_ini_insc, ee.dt_fim_insc, ee.num_edital
+        tpo.*, esc.escola, um.municipio, esc.email, esc.telefone, md.modalidade, tc.tipo, cr.curso, ee.id AS 'num_edital_id', ee.dt_ini_edit, ee.dt_fim_edit, ee.dt_ini_insc, ee.dt_fim_insc, ee.num_edital
         from Turmas_planejado_orcado tpo 
         inner JOIN escolas esc ON esc.id = tpo.escola_id
         left JOIN udepi_municipio um ON um.escola_id = esc.id
@@ -130,141 +130,165 @@ def criaredital():
             turmas_planejadas['dt_fim_insc'].values[0]),  # type: ignore
         '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[
             0] is not None else default_date
-    content = json.loads(turmas_planejadas.to_json(orient='values'))
-    columns = [{
-        "name": "id",
-        "type": "integer"
-    }, {
-        "name": "diretoria",
-        "type": "string"
-    }, {
-        "name": "escola_id",
-        "type": "integer"
-    }, {
-        "name": "tipo_curso_id",
-        "type": "integer"
-    }, {
-        "name": "curso_id",
-        "type": "string"
-    }, {
-        "name": "turno",
-        "type": "string"
-    }, {
-        "name": "ano",
-        "type": "integer"
-    }, {
-        "name": "modalidade_id",
-        "type": "integer"
-    }, {
-        "name": "trimestre",
-        "type": "integer"
-    }, {
-        "name": "carga_horaria",
-        "type": "integer"
-    }, {
-        "name": "vagas_totais",
-        "type": "integer"
-    }, {
-        "name": "vagas_turma",
-        "type": "integer"
-    }, {
-        "name": "carga_horaria_total",
-        "type": "integer"
-    }, {
-        "name": "previsao_inicio",
-        "type": "string"
-    }, {
-        "name": "previsao_fim",
-        "type": "string"
-    }, {
-        "name": "dias_semana",
-        "type": "string"
-    }, {
-        "name": "previsao_abertura_edital",
-        "type": "string"
-    }, {
-        "name": "previsao_fechamento_edital",
-        "type": "string"
-    }, {
-        "name": "data_registro",
-        "type": "string"
-    }, {
-        "name": "eixo_id",
-        "type": "integer"
-    }, {
-        "name": "udepi_id",
-        "type": "integer"
-    }, {
-        "name": "situacao",
-        "type": "integer"
-    }, {
-        "name": "jus_reprovacao",
-        "type": "string"
-    }, {
-        "name": "num_edital_id",
-        "type": "integer"
-    }, {
-        "name": "escola",
-        "type": "string"
-    }, {
-        "name": "municipio",
-        "type": "string"
-    }, {
-        "name": "email",
-        "type": "string"
-    }, {
-        "name": "telefone",
-        "type": "string"
-    }, {
-        "name": "modalidade",
-        "type": "string"
-    }, {
-        "name": "tipo",
-        "type": "string"
-    }, {
-        "name": "curso",
-        "type": "string"
-    }, {
-        "name": "num_edital",
-        "type": "integer"
-    }, {
-        "name": "dt_ini_edit",
-        "type": "string"
-    }, {
-        "name": "dt_fim_edit",
-        "type": "string"
-    }, {
-        "name": "dt_ini_insc",
-        "type": "string"
-    }, {
-        "name": "dt_fim_insc",
-        "type": "string"
-    }, {
-        "name": "previsao_abertura_edital_estenso",
-        "type": "string"
-    }, {
-        "name": "previsao_fechamento_edital_estenso",
-        "type": "string"
-    }, {
-        "name": "previsao_abertura_edital_normal",
-        "type": "string"
-    }, {
-        "name": "previsao_fechamento_edital_normal",
-        "type": "string"
-    }, {
-        "name": "previsao_inicio_inscricao",
-        "type": "string"
-    }]
+    turmas_planejadas['data_inicio_curso'] = datetime.strftime(
+        pd.Timestamp(
+            turmas_planejadas['previsao_inicio'].values[0]),  # type: ignore
+        '%d de %B de %Y') if turmas_planejadas['previsao_inicio'].values[
+            0] is not None else default_date
+    turmas_planejadas[
+        'data_resultado'] = turmas_planejadas['dt_fim_insc'] + timedelta(
+            days=7)  # type: ignore
+    turmas_planejadas[
+        'data_resultado_final'] = turmas_planejadas['dt_fim_insc'] + timedelta(
+            days=10)  # type: ignore
 
-    mappedJson = []
-    # print(len(content[0]), len(columns))
-    for cont in range(len(content)):
-        mappedObject = {}
-        for col in range(len(columns)):
-            mappedObject[columns[col]["name"]] = content[cont][col]
-        mappedJson.append(mappedObject)
+    turmas_planejadas['dt_resultado'] = datetime.strftime(
+        pd.Timestamp(
+            turmas_planejadas['data_resultado'].values[0]),  # type: ignore
+        '%d de %B de %Y') if turmas_planejadas['data_resultado'].values[
+            0] is not None else default_date
+    content = turmas_planejadas.to_dict('records')
 
-    turmas_planejadas = mappedJson
+    # content = json.loads(turmas_planejadas.to_json(orient='values'))
+    # columns = [{
+    #     "name": "id",
+    #     "type": "integer"
+    # }, {
+    #     "name": "diretoria",
+    #     "type": "string"
+    # }, {
+    #     "name": "escola_id",
+    #     "type": "integer"
+    # }, {
+    #     "name": "tipo_curso_id",
+    #     "type": "integer"
+    # }, {
+    #     "name": "curso_id",
+    #     "type": "string"
+    # }, {
+    #     "name": "turno",
+    #     "type": "string"
+    # }, {
+    #     "name": "ano",
+    #     "type": "integer"
+    # }, {
+    #     "name": "modalidade_id",
+    #     "type": "integer"
+    # }, {
+    #     "name": "trimestre",
+    #     "type": "integer"
+    # }, {
+    #     "name": "carga_horaria",
+    #     "type": "integer"
+    # }, {
+    #     "name": "vagas_totais",
+    #     "type": "integer"
+    # }, {
+    #     "name": "vagas_turma",
+    #     "type": "integer"
+    # }, {
+    #     "name": "carga_horaria_total",
+    #     "type": "integer"
+    # }, {
+    #     "name": "previsao_inicio",
+    #     "type": "string"
+    # }, {
+    #     "name": "previsao_fim",
+    #     "type": "string"
+    # }, {
+    #     "name": "dias_semana",
+    #     "type": "string"
+    # }, {
+    #     "name": "previsao_abertura_edital",
+    #     "type": "string"
+    # }, {
+    #     "name": "previsao_fechamento_edital",
+    #     "type": "string"
+    # }, {
+    #     "name": "data_registro",
+    #     "type": "string"
+    # }, {
+    #     "name": "eixo_id",
+    #     "type": "integer"
+    # }, {
+    #     "name": "udepi_id",
+    #     "type": "integer"
+    # }, {
+    #     "name": "situacao",
+    #     "type": "integer"
+    # }, {
+    #     "name": "jus_reprovacao",
+    #     "type": "string"
+    # }, {
+    #     "name": "num_edital_id",
+    #     "type": "integer"
+    # }, {
+    #     "name": "escola",
+    #     "type": "string"
+    # }, {
+    #     "name": "municipio",
+    #     "type": "string"
+    # }, {
+    #     "name": "email",
+    #     "type": "string"
+    # }, {
+    #     "name": "telefone",
+    #     "type": "string"
+    # }, {
+    #     "name": "modalidade",
+    #     "type": "string"
+    # }, {
+    #     "name": "tipo",
+    #     "type": "string"
+    # }, {
+    #     "name": "curso",
+    #     "type": "string"
+    # }, {
+    #     "name": "num_edital",
+    #     "type": "integer"
+    # }, {
+    #     "name": "dt_ini_edit",
+    #     "type": "string"
+    # }, {
+    #     "name": "dt_fim_edit",
+    #     "type": "string"
+    # }, {
+    #     "name": "dt_ini_insc",
+    #     "type": "string"
+    # }, {
+    #     "name": "dt_fim_insc",
+    #     "type": "string"
+    # }, {
+    #     "name": "previsao_abertura_edital_estenso",
+    #     "type": "string"
+    # }, {
+    #     "name": "previsao_fechamento_edital_estenso",
+    #     "type": "string"
+    # }, {
+    #     "name": "previsao_abertura_edital_normal",
+    #     "type": "string"
+    # }, {
+    #     "name": "previsao_fechamento_edital_normal",
+    #     "type": "string"
+    # }, {
+    #     "name": "previsao_inicio_inscricao",
+    #     "type": "string"
+    # }, {
+    #     "name": "data_inicio_curso",
+    #     "type": "string"
+    # }]
+
+    # mappedJson = []
+    # # print(len(content[0]), len(columns))
+    # for cont in range(len(content)):
+    #     mappedObject = {}
+    #     for col in range(len(columns)):
+    #         mappedObject[columns[col]["name"]] = content[cont][col]
+    #     mappedJson.append(mappedObject)
+
+    # turmas_planejadas = mappedJson
+    turmas_planejadas = content
+
     idsEdital = []
     for turma in turmas_planejadas:
         idsEdital.append(turma["num_edital_id"])
@@ -327,17 +351,19 @@ def criaredital():
 
 
 if __name__ == '__main__':
-    worker = Worker()
-    print('Worker started')
-    get_engine()
+    # worker = Worker()
+    # print('Worker started')
+    # get_engine()
 
-    while True:
-        tasks = worker.fetch_tasks()
+    # while True:
+    #     tasks = worker.fetch_tasks()
 
-        for task in tasks:
-            criaredital()
-            print("entrei dentro do worker")
-            worker.complete_task(task_id=task.id_, variables={})
-            print('Inserção realizada com sucesso!')
+    #     for task in tasks:
+    #         criaredital()
+    #         print("entrei dentro do worker")
+    #         worker.complete_task(task_id=task.id_, variables={})
+    #         print('Inserção realizada com sucesso!')
 
-        time.sleep(5)
+    #     time.sleep(5)
+
+    criaredital()
