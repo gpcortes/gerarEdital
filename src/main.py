@@ -135,18 +135,25 @@ def criaredital():
             turmas_planejadas['previsao_inicio'].values[0]),  # type: ignore
         '%d de %B de %Y') if turmas_planejadas['previsao_inicio'].values[
             0] is not None else default_date
+
     turmas_planejadas[
         'data_resultado'] = turmas_planejadas['dt_fim_insc'] + timedelta(
             days=7)  # type: ignore
-    turmas_planejadas[
-        'data_resultado_final'] = turmas_planejadas['dt_fim_insc'] + timedelta(
-            days=10)  # type: ignore
-
     turmas_planejadas['dt_resultado'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['data_resultado'].values[0]),  # type: ignore
         '%d de %B de %Y') if turmas_planejadas['data_resultado'].values[
             0] is not None else default_date
+
+    turmas_planejadas[
+        'data_resultado_final'] = turmas_planejadas['dt_fim_insc'] + timedelta(
+            days=10)  # type: ignore
+    turmas_planejadas['data_resultado_final'] = datetime.strftime(
+        pd.Timestamp(
+            turmas_planejadas['data_resultado_final'].values[0]),  # type: ignore
+        '%d de %B de %Y') if turmas_planejadas['data_resultado_final'].values[
+            0] is not None else default_date
+
     content = turmas_planejadas.to_dict('records')
 
     # content = json.loads(turmas_planejadas.to_json(orient='values'))
@@ -360,8 +367,7 @@ if __name__ == '__main__':
 
         for task in tasks:
             criaredital()
-            print("entrei dentro do worker")
             worker.complete_task(task_id=task.id_, variables={})
             print('Inserção realizada com sucesso!')
 
-        time.sleep(5)
+        time.sleep(30)
