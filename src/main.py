@@ -64,18 +64,22 @@ def unique(list1):
     return unique_list
 
 
-def get_engine():
+def get_engine(rede):
     string_connection = "mysql+pymysql://{user}:{password}@{host}:{port}/{database}".format(
+        if rede  == 'efg':
+            database = config.EFG_DOMAINS_DB
+        elif rede == 'cotec':
+            database = config.COTEC_DOMAINS_DB
         user=config.CAMUNDA_DOMAINS_USER,  # type: ignore
         password=quote(config.CAMUNDA_DOMAINS_PASS),  # type: ignore
         host=config.CAMUNDA_DOMAINS_HOST,  # type: ignore
         port=config.CAMUNDA_DOMAINS_PORT,  # type: ignore
-        database=config.CAMUNDA_DOMAINS_DB  # type: ignore
+        database=database  # type: ignore
     )
     return create_engine(string_connection)
 
 
-def criaredital():
+def criaredital(rede):
 
     turmas_planejadas = pd.read_sql_query("""
         SELECT
@@ -89,7 +93,7 @@ def criaredital():
         INNER JOIN edital_ensino ee ON ee.id = tpo.num_edital_id
         WHERE ee.`status`='0'AND ee.dt_ini_edit and ee.dt_fim_edit AND ee.dt_ini_insc AND ee.dt_fim_insc is NOT null
     """,
-                                          con=get_engine())
+                                          con=get_engine(rede))
     #turmas_planejadas = turmas_planejadas[turmas_planejadas['id']==id_]
     # turmas_planejadas.values[0]
     #turmas_planejadas['previsao_abertura_edital'] = datetime.strftime(pd.Timestamp(turmas_planejadas['previsao_abertura_edital'].values[0]),'%Y-%m-%d')
@@ -344,7 +348,7 @@ def criaredital():
         print(f'Aquivo de edital gerado: "{PDF_PATH}"')
 
         ### Rotina para atualizar o path do edital em PDF ###
-        engine = get_engine()
+        engine = get_engine(rede)
         connection = engine.connect()
         statement = text(f"""
                         UPDATE edital_ensino
@@ -360,13 +364,13 @@ def criaredital():
 if __name__ == '__main__':
     worker = Worker()
     print('Worker started')
-    get_engine()
 
     while True:
         tasks = worker.fetch_tasks()
 
         for task in tasks:
-            criaredital()
+            rede = task.variables['nomeRede'].value if 'nomeRede' in task.variables else continue
+            criaredital(rede)
             worker.complete_task(task_id=task.id_, variables={})
             print('Inserção realizada com sucesso!')
 

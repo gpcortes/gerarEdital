@@ -17,6 +17,8 @@ services:
             - CAMUNDA_DOMAINS_USER=${CAMUNDA_DOMAINS_USER}
             - CAMUNDA_DOMAINS_DB=${CAMUNDA_DOMAINS_DB}
             - CAMUNDA_DOMAINS_PASS=${CAMUNDA_DOMAINS_PASS}
+            - EFG_DOMAINS_DB=${EFG_DOMAINS_DB}
+            - COTEC_DOMAINS_DB=${COTEC_DOMAINS_DB}
         volumes:
             - ./src:/home/python/app
             - ${ACS_DOCS_PATH}/Ensino/gerarEdital/Editais:/home/python/app/outputs:rw
