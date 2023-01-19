@@ -65,11 +65,11 @@ def unique(list1):
 
 
 def get_engine(rede):
+    if rede  == 'efg':
+        database = config.EFG_DOMAINS_DB
+    elif rede == 'cotec':
+        database = config.COTEC_DOMAINS_DB
     string_connection = "mysql+pymysql://{user}:{password}@{host}:{port}/{database}".format(
-        if rede  == 'efg':
-            database = config.EFG_DOMAINS_DB
-        elif rede == 'cotec':
-            database = config.COTEC_DOMAINS_DB
         user=config.CAMUNDA_DOMAINS_USER,  # type: ignore
         password=quote(config.CAMUNDA_DOMAINS_PASS),  # type: ignore
         host=config.CAMUNDA_DOMAINS_HOST,  # type: ignore
