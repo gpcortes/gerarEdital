@@ -369,7 +369,7 @@ if __name__ == '__main__':
         tasks = worker.fetch_tasks()
 
         for task in tasks:
-            rede = task.variables['nomeRede'].value if 'nomeRede' in task.variables else continue
+            rede = task.variables['nomeRede'].value if 'nomeRede' in task.variables else None
             criaredital(rede)
             worker.complete_task(task_id=task.id_, variables={})
             print('Inserção realizada com sucesso!')
