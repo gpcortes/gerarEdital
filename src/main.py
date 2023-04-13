@@ -65,10 +65,11 @@ def unique(list1):
 
 
 def get_engine(rede):
+    database = ''
     if rede  == 'efg':
-        database = config.EFG_DOMAINS_DB
+        database = config.EFG_DOMAINS_DB  # type: ignore
     elif rede == 'cotec':
-        database = config.COTEC_DOMAINS_DB
+        database = config.COTEC_DOMAINS_DB  # type: ignore
     string_connection = "mysql+pymysql://{user}:{password}@{host}:{port}/{database}".format(
         user=config.CAMUNDA_DOMAINS_USER,  # type: ignore
         password=quote(config.CAMUNDA_DOMAINS_PASS),  # type: ignore
@@ -76,6 +77,7 @@ def get_engine(rede):
         port=config.CAMUNDA_DOMAINS_PORT,  # type: ignore
         database=database  # type: ignore
     )
+    print(string_connection)
     return create_engine(string_connection)
 
 
@@ -92,8 +94,7 @@ def criaredital(rede):
         INNER JOIN cursos cr ON cr.id = tpo.curso_id
         INNER JOIN edital_ensino ee ON ee.id = tpo.num_edital_id
         WHERE ee.`status`='0'AND ee.dt_ini_edit and ee.dt_fim_edit AND ee.dt_ini_insc AND ee.dt_fim_insc is NOT null
-    """,
-                                          con=get_engine(rede))
+    """, con=get_engine(rede))
     #turmas_planejadas = turmas_planejadas[turmas_planejadas['id']==id_]
     # turmas_planejadas.values[0]
     #turmas_planejadas['previsao_abertura_edital'] = datetime.strftime(pd.Timestamp(turmas_planejadas['previsao_abertura_edital'].values[0]),'%Y-%m-%d')
