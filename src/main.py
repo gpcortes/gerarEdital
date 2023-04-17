@@ -327,7 +327,7 @@ def criaredital(rede):
         ano_edital = date_time_now.year
 
         BASE_DIR = '/home/python/app/outputs'
-        ACS_PATH = f"{ano_edital}/{resposta[r][0]['escola']}"
+        ACS_PATH = unidecode(f"{ano_edital}/{resposta[r][0]['escola']}")
         OUTPUT_PATH = os.path.join(BASE_DIR, ACS_PATH)
 
         if not os.path.exists(OUTPUT_PATH):
