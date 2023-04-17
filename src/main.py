@@ -359,10 +359,7 @@ def criaredital(rede):
                             id = {r}
                         """)
         print(statement)
-<<<<<<< HEAD
-=======
         exit()
->>>>>>> 1fd6cd484508ef79cc504786adc601fcf2969ca1
         connection.execute(statement=statement)
         connection.close()
 
