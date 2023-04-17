@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONFAULTHANDLER=1
 ENV PYTHONUNBUFFERED=1
 
-RUN useradd -ms /bin/bash python
+RUN adduser -u 2000 --disabled-password --gecos "" python && chown -R python /home/python
 
 RUN apt-get update && apt-get install git -y
 RUN apt-get install -y libreoffice

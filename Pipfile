@@ -10,7 +10,6 @@ envconfiguration = "*"
 pandas = "*"
 caworker = "*"
 pymysql = "*"
-unidecode = "*"
 
 [dev-packages]
 pylint = "*"
