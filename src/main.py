@@ -359,8 +359,9 @@ def criaredital(rede):
                             id = {r}
                         """)
         print(statement)
-        exit()
-        connection.execute(statement=statement)
+
+        result = connection.execute(statement=statement)
+        print(result)
         connection.close()
 
 
