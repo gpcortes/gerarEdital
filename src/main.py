@@ -358,6 +358,7 @@ def criaredital(rede):
                         WHERE
                             id = {r}
                         """)
+        print(statement)
         connection.execute(statement=statement)
         connection.close()
 
