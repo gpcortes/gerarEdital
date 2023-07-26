@@ -80,6 +80,10 @@ def get_engine(rede):
     print(string_connection)
     return create_engine(string_connection)
 
+def serializar_date(obj):
+    if isinstance(obj, date):
+        return obj.isoformat()
+    raise TypeError("Tipo de objeto não é serializável")
 
 def criaredital(rede):
 
@@ -335,8 +339,8 @@ def criaredital(rede):
         agora = datetime.strftime(date_time_now, '%Y-%m-%d_%H-%M-%S-%f')
         ano_edital = date_time_now.year
 
-        parsed_json = json.dumps(resposta[r], indent=4)
-        print(parsed_json)
+        json_string = json.dumps(resposta[r], default=serializar_date, indent=4)
+        print(json_string)
 
         BASE_DIR = '/home/python/app/outputs'
         ACS_PATH = unidecode(f"{ano_edital}/{resposta[r][0]['escola']}")
