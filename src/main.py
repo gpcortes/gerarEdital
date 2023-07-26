@@ -152,7 +152,12 @@ def criaredital(rede):
 
     turmas_planejadas[
         'data_resultado_final'] = turmas_planejadas['dt_fim_insc'] + timedelta(
-            days=10)  # type: ignore
+            days=7)  # type: ignore
+
+    turmas_planejadas[
+        'data_recurso_edital'] = turmas_planejadas['dt_ini_insc'] + timedelta(
+            days=-2)  # type: ignore
+
     turmas_planejadas['data_resultado_final'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['data_resultado_final'].values[0]),  # type: ignore
