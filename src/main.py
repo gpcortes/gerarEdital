@@ -166,8 +166,11 @@ def criaredital(rede):
 
     content = turmas_planejadas.to_dict('records')
 
-    conver_to_json = json.loads(turmas_planejadas, indent=4)
-    print(conver_to_json)
+    result_json = turmas_planejadas.to_json(orient="index")
+
+    parsed_json = json.loads(result_json)
+
+    print(json.dumps(parsed_json, indent=4))
 
     # content = json.loads(turmas_planejadas.to_json(orient='values'))
     # columns = [{
