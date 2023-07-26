@@ -166,6 +166,9 @@ def criaredital(rede):
 
     content = turmas_planejadas.to_dict('records')
 
+    conver_to_json = json.loads(turmas_planejadas, indent=4)
+    print(conver_to_json)
+
     # content = json.loads(turmas_planejadas.to_json(orient='values'))
     # columns = [{
     #     "name": "id",
@@ -305,8 +308,6 @@ def criaredital(rede):
 
     # turmas_planejadas = mappedJson
     turmas_planejadas = content
-
-    print(json.dumps(content, indent = 4))
 
     idsEdital = []
     for turma in turmas_planejadas:
