@@ -335,7 +335,7 @@ def criaredital(rede):
         agora = datetime.strftime(date_time_now, '%Y-%m-%d_%H-%M-%S-%f')
         ano_edital = date_time_now.year
 
-        print(json.dumps(resposta[r], indent=4))
+        print(type(resposta[r]))
 
         BASE_DIR = '/home/python/app/outputs'
         ACS_PATH = unidecode(f"{ano_edital}/{resposta[r][0]['escola']}")
