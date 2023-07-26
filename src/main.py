@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.sql import text
 import pandas as pd
 from docxtpl import DocxTemplate
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import json
 import envconfiguration as config
 import subprocess
@@ -15,6 +15,7 @@ import os
 import sys
 import locale
 from unidecode import unidecode
+
 
 def convert_to(source, folder, timeout=None):
     args = [
