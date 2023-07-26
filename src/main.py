@@ -306,7 +306,7 @@ def criaredital(rede):
     # turmas_planejadas = mappedJson
     turmas_planejadas = content
 
-    print(json.dumps(content, indent = 4)
+    print(json.dumps(content, indent = 4))
 
     idsEdital = []
     for turma in turmas_planejadas:
