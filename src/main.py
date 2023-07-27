@@ -15,7 +15,7 @@ import os
 import sys
 import locale
 from unidecode import unidecode
-
+from jinja2 import Environment, FileSystemLoader
 
 def convert_to(source, folder, timeout=None):
     args = [
@@ -49,6 +49,33 @@ class LibreOfficeError(Exception):
 
     def __init__(self, output):
         self.output = output
+
+
+def render_template(template_path, data):
+    # Configurar o ambiente do Jinja2
+    env = Environment(loader=FileSystemLoader('.'), autoescape=True)
+
+    # Carregar o template Word utilizando o Jinja2
+    template = env.get_template(template_path)
+
+    # Renderizar o template com os dados
+    rendered_content = template.render(data)
+
+    # Converter a string renderizada para bytes UTF-16 LE
+    utf16_bytes = rendered_content.encode('utf-16le')
+
+    return utf16_bytes
+
+
+def save_to_word(template_bytes, output_path):
+    # Criar um novo documento Word usando a biblioteca docxtpl
+    doc = DocxTemplate(template_bytes)
+
+    # Adicionar o conteúdo ao documento Word
+    doc.replace_body(template_bytes.decode('utf-16le'))
+
+    # Salvar o documento Word em um arquivo
+    doc.save(output_path)
 
 
 def unique(list1):
@@ -354,14 +381,25 @@ def criaredital(rede):
         # print(type(r))
         # print(resposta[r])
         # print(r)
-        doc1 = DocxTemplate("/home/python/app/templates/edital_template.docx")
+        template_path = "/home/python/app/templates/edital_template.docx"
+
+        data = {'turmas_planejadas': resposta[r]}
+
+        template_bytes = render_template(template_path, data)
+
+        output_path = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
+
+        save_to_word(template_bytes, output_path)
+
+        # doc1 = DocxTemplate("/home/python/app/templates/edital_template.docx")
         # print(doc1)
-        doc1.render({'turmas_planejadas': resposta[r]})
+        # doc1.render({'turmas_planejadas': resposta[r]})
         # print(doc1)
-        docx = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
+        # docx = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
         # print(docx)
-        doc1.save(docx)
-        PDF_NAME = convert_to(docx, OUTPUT_PATH)
+        # doc1.save(docx)
+
+        PDF_NAME = convert_to(output_path, OUTPUT_PATH)
         PDF_PATH = os.path.join('editais', ACS_PATH, PDF_NAME)
         print(f'Aquivo de edital gerado: "{PDF_PATH}"')
 
