@@ -389,7 +389,7 @@ def criaredital(rede):
 
         # output_path = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
 
-        save_to_word(template_bytes, output_path)
+        # save_to_word(template_bytes, output_path)
 
         doc1 = DocxTemplate("/home/python/app/templates/edital_template.docx")
         # print(doc1)
