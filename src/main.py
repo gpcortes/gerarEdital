@@ -381,23 +381,23 @@ def criaredital(rede):
         # print(type(r))
         # print(resposta[r])
         # print(r)
-        template_path = "/home/python/app/templates/edital_template.docx"
+        # template_path = "/home/python/app/templates/edital_template.docx"
 
-        data = {'turmas_planejadas': resposta[r]}
+        # data = {'turmas_planejadas': resposta[r]}
 
-        template_bytes = render_template(template_path, data)
+        # template_bytes = render_template(template_path, data)
 
-        output_path = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
+        # output_path = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
 
         save_to_word(template_bytes, output_path)
 
-        # doc1 = DocxTemplate("/home/python/app/templates/edital_template.docx")
+        doc1 = DocxTemplate("/home/python/app/templates/edital_template.docx")
         # print(doc1)
-        # doc1.render({'turmas_planejadas': resposta[r]})
+        doc1.render({'turmas_planejadas': resposta[r]})
         # print(doc1)
-        # docx = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
+        docx = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
         # print(docx)
-        # doc1.save(docx)
+        doc1.save(docx)
 
         PDF_NAME = convert_to(output_path, OUTPUT_PATH)
         PDF_PATH = os.path.join('editais', ACS_PATH, PDF_NAME)
