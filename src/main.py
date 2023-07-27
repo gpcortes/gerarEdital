@@ -399,7 +399,7 @@ def criaredital(rede):
         # print(docx)
         doc1.save(docx)
 
-        PDF_NAME = convert_to(output_path, OUTPUT_PATH)
+        PDF_NAME = convert_to(docx, OUTPUT_PATH)
         PDF_PATH = os.path.join('editais', ACS_PATH, PDF_NAME)
         print(f'Aquivo de edital gerado: "{PDF_PATH}"')
 
