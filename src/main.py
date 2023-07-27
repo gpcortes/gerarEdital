@@ -341,7 +341,7 @@ def criaredital(rede):
         ano_edital = date_time_now.year
 
         json_string = json.dumps({'turmas_planejadas': resposta[r]}, default=serializar_date, indent=4)
-        print(json_string)
+        # print(json_string)
 
         BASE_DIR = '/home/python/app/outputs'
         ACS_PATH = unidecode(f"{ano_edital}/{resposta[r][0]['escola']}")
@@ -392,7 +392,7 @@ if __name__ == '__main__':
             rede = task.variables['nomeRede'].value if 'nomeRede' in task.variables else None
             print(rede)
             criaredital(rede)
-            # worker.complete_task(task_id=task.id_, variables={})
+            worker.complete_task(task_id=task.id_, variables={})
             print('Inserção realizada com sucesso!')
 
         time.sleep(30)
