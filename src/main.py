@@ -97,8 +97,7 @@ def get_engine(rede):
         database = config.EFG_DOMAINS_DB  # type: ignore
     elif rede == 'cotec':
         database = config.COTEC_DOMAINS_DB  # type: ignore
-    string_connection = "mysql+pymysql://{user}:\
-        {password}@{host}:{port}/{database}".format(
+    string_connection = "mysql+pymysql://{user}:{password}@{host}:{port}/{database}".format(
         user=config.CAMUNDA_DOMAINS_USER,  # type: ignore
         password=quote(config.CAMUNDA_DOMAINS_PASS),  # type: ignore
         host=config.CAMUNDA_DOMAINS_HOST,  # type: ignore
@@ -504,12 +503,10 @@ def criaredital(rede):
         # print(doc1)
         if resposta[r][0]['tipo_edital'] == 'retificacao':
             docx = unidecode(
-                f"{OUTPUT_PATH}/edital_retificacao_{resposta[r][0]['escola']}\
-                    _{resposta[r][0]['num_edital']}_{agora}.docx")
+                f"{OUTPUT_PATH}/edital_retificacao_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
         else:
             docx = unidecode(
-                f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}\
-                    _{resposta[r][0]['num_edital']}_{agora}.docx")
+                f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
         # print(docx)
         doc1.save(docx)
 
@@ -520,9 +517,7 @@ def criaredital(rede):
         # Rotina para atualizar o path do edital em PDF
         engine = get_engine(rede)
         connection = engine.connect()
-        table_name = 'edital_ensino' if \
-            resposta[r][0]['tipo_edital'] == 'normal' \
-            else 'editais_retificados'
+        table_name = 'edital_ensino' if resposta[r][0]['tipo_edital'] == 'normal' else 'editais_retificados'
         statement = text(f"""
             UPDATE {table_name}
             SET
@@ -544,8 +539,7 @@ if __name__ == '__main__':
         tasks = worker.fetch_tasks()
 
         for task in tasks:
-            rede = task.variables['nomeRede'].value if \
-                'nomeRede' in task.variables else None
+            rede = task.variables['nomeRede'].value if 'nomeRede' in task.variables else None
             criaredital(rede)
             worker.complete_task(task_id=task.id_, variables={})
             print('Inserção realizada com sucesso!')
