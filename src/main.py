@@ -104,7 +104,7 @@ def get_engine(rede):
         port=config.CAMUNDA_DOMAINS_PORT,  # type: ignore
         database=database  # type: ignore
     )
-    print(string_connection)
+    # print(string_connection)
     return create_engine(string_connection)
 
 
@@ -164,9 +164,6 @@ def criaredital(rede):
         INNER JOIN edital_ensino ee ON ee.id = tpo.num_edital_id
         WHERE
             ee.`status`='0'
-            AND ee.dt_ini_edit
-            AND ee.dt_fim_edit
-            AND ee.dt_ini_insc
             AND ee.dt_fim_insc is NOT null
         UNION ALL
         SELECT
@@ -216,9 +213,6 @@ def criaredital(rede):
         INNER JOIN editais_retificados ee ON ee.id = tret.num_edital_id
         WHERE
             ee.`status`='0'
-            AND ee.dt_ini_edit
-            AND ee.dt_fim_edit
-            AND ee.dt_ini_insc
             AND ee.dt_fim_insc is NOT null
     """, con=get_engine(rede))
     # turmas_planejadas = turmas_planejadas[turmas_planejadas['id']==id_]
@@ -235,48 +229,39 @@ def criaredital(rede):
     turmas_planejadas['previsao_abertura_edital_estenso'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
-        '%d de %B de %Y') if turmas_planejadas['dt_ini_edit'].values[
-            0] is not None else default_date
+        '%d de %B de %Y') if turmas_planejadas['dt_ini_edit'].values[0] is not None else default_date
     turmas_planejadas[
         'previsao_fechamento_edital_estenso'] = datetime.strftime(
             pd.Timestamp(
                 turmas_planejadas['dt_fim_edit'].values[0]),  # type: ignore
-            '%d de %B de %Y') if turmas_planejadas['dt_ini_edit'].values[
-                0] is not None else default_date
+            '%d de %B de %Y') if turmas_planejadas['dt_ini_edit'].values[0] is not None else default_date
     turmas_planejadas['previsao_abertura_edital_normal'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_ini_edit'].values[0]),  # type: ignore
-        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[
-            0] is not None else default_date
+        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[0] is not None else default_date
     turmas_planejadas['previsao_fechamento_edital_normal'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_fim_edit'].values[0]),  # type: ignore
-        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[
-            0] is not None else default_date
+        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[0] is not None else default_date
     turmas_planejadas['previsao_inicio_inscricao'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_ini_insc'].values[0]),  # type: ignore
-        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[
-            0] is not None else default_date
+        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[0] is not None else default_date
     turmas_planejadas['previsao_fim_inscricao'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['dt_fim_insc'].values[0]),  # type: ignore
-        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[
-            0] is not None else default_date
+        '%d/%m/%Y') if turmas_planejadas['dt_ini_edit'].values[0] is not None else default_date
     turmas_planejadas['data_inicio_curso'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['previsao_inicio'].values[0]),  # type: ignore
-        '%d de %B de %Y') if turmas_planejadas['previsao_inicio'].values[
-            0] is not None else default_date
+        '%d de %B de %Y') if turmas_planejadas['previsao_inicio'].values[0] is not None else default_date
 
     turmas_planejadas[
-        'data_resultado'] = turmas_planejadas['dt_fim_insc'] + timedelta(
-            days=7)  # type: ignore
+        'data_resultado'] = turmas_planejadas['dt_fim_insc'] + timedelta(days=7)  # type: ignore
     turmas_planejadas['dt_resultado'] = datetime.strftime(
         pd.Timestamp(
             turmas_planejadas['data_resultado'].values[0]),  # type: ignore
-        '%d de %B de %Y') if turmas_planejadas['data_resultado'].values[
-            0] is not None else default_date
+        '%d de %B de %Y') if turmas_planejadas['data_resultado'].values[0] is not None else default_date
 
     turmas_planejadas[
         'data_resultado_final'] = turmas_planejadas['dt_fim_insc'] + timedelta(
@@ -291,8 +276,7 @@ def criaredital(rede):
             turmas_planejadas['data_resultado_final'].values[
                 0
             ]),  # type: ignore
-        '%d de %B de %Y') if turmas_planejadas['data_resultado_final'].values[
-            0] is not None else default_date
+        '%d de %B de %Y') if turmas_planejadas['data_resultado_final'].values[0] is not None else default_date
 
     content = turmas_planejadas.to_dict('records')
 
