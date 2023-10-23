@@ -15,7 +15,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/Sao_Paulo
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt install -y ntpdate
-RUN dpkg-reconfigure tzdata
+RUN dpkg-reconfigure tzdata
 
 ARG APP_USER_NAME
 ARG APP_UID
