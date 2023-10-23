@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  app:
+    container_name: ${DJ_HOST}
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        IMAGE_NAME: ${DJ_IMAGE_NAME}
+        IMAGE_TAG: ${DJ_IMAGE_TAG}
+        APP_USER_NAME: ${APP_USER_NAME}
+        APP_NAME: ${APP_NAME}
+        APP_UID: ${APP_UID}
+        APP_GID: ${APP_GID}
+    environment:
+      - TOPIC=Docedital
+      - ENG_REST_URL=${CAMUNDA_URL}
+      - ENG_REST_USERNAME=${CAMUNDA_USERNAME}
+      - ENG_REST_PASSWORD=${CAMUNDA_PASSWORD}
+      - MAX_TASK_DURATION=30000
+      - CAMUNDA_DOMAINS_HOST=${CAMUNDA_DOMAINS_HOST}
+      - CAMUNDA_DOMAINS_PORT=${CAMUNDA_DOMAINS_PORT}
+      - CAMUNDA_DOMAINS_USER=${CAMUNDA_DOMAINS_USER}
+      - CAMUNDA_DOMAINS_DB=${CAMUNDA_DOMAINS_DB}
+      - CAMUNDA_DOMAINS_PASS=${CAMUNDA_DOMAINS_PASS}
+      - EFG_DOMAINS_DB=${EFG_DOMAINS_DB}
+      - COTEC_DOMAINS_DB=${COTEC_DOMAINS_DB}
+    env_file:
+      - .env
+    volumes:
+      - ./src:/home/${APP_USER_NAME}/${APP_NAME}
+      - ./${DJ_BACKUP}:/home/${APP_USER_NAME}/${APP_NAME}/backup
+      - ./${DJ_UPLOAD}:/home/${APP_USER_NAME}/${APP_NAME}/upload
+      - ./${DJ_MEDIA}:/home/${APP_USER_NAME}/${APP_NAME}/media
+      - /usr/share/zoneinfo/America/Sao_Paulo:/etc/localtime:ro
+    networks:
+      - default
+      - backend
+
+networks:
+  default:
+    external: false
+    name: ${COMPOSE_PROJECT_NAME}-network
+  backend:
+    external: true
+    name: backend
