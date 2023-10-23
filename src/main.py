@@ -117,15 +117,108 @@ def criaredital(rede):
 
     turmas_planejadas = pd.read_sql_query("""
         SELECT
-        tpo.*, esc.escola, um.municipio, esc.email, esc.telefone, md.modalidade, tc.tipo, cr.curso, ee.id AS 'num_edital_id', ee.dt_ini_edit, ee.dt_fim_edit, ee.dt_ini_insc, ee.dt_fim_insc, ee.num_edital
-        from Turmas_planejado_orcado tpo 
-        inner JOIN escolas esc ON esc.id = tpo.escola_id
-        left JOIN udepi_municipio um ON um.escola_id = esc.id
+            'normal' AS tipo_edital,
+            tpo.id,
+            tpo.diretoria,
+            tpo.turno,
+            tpo.trimestre,
+            tpo.vagas_totais,
+            tpo.carga_horaria,
+            tpo.carga_horaria_total,
+            tpo.previsao_inicio,
+            tpo.previsao_fim,
+            tpo.dias_semana,
+            tpo.previsao_abertura_edital,
+            tpo.previsao_fechamento_edital,
+            tpo.data_registro,
+            tpo.situacao,
+            tpo.jus_reprovacao,
+            tpo.curso_id,
+            tpo.eixo_id,
+            tpo.modalidade_id,
+            tpo.num_edital_id,
+            tpo.tipo_curso_id,
+            tpo.udepi_id,
+            tpo.curso_tecnico,
+            tpo.qualificacoes,
+            esc.escola,
+            um.municipio,
+            esc.email,
+            esc.telefone,
+            md.modalidade,
+            tc.tipo,
+            cr.curso,
+            ee.id AS 'num_edital_id',
+            ee.dt_ini_edit,
+            ee.dt_fim_edit,
+            ee.dt_ini_insc,
+            ee.dt_fim_insc,
+            ee.num_edital
+        FROM Turmas_planejado_orcado tpo 
+        INNER JOIN escolas esc ON esc.id = tpo.escola_id
+        LEFT JOIN udepi_municipio um ON um.escola_id = esc.id
         INNER JOIN modalidade md ON md.id = tpo.modalidade_id
         INNER JOIN tipo_curso tc ON tc.id = tpo.tipo_curso_id
         INNER JOIN cursos cr ON cr.id = tpo.curso_id
         INNER JOIN edital_ensino ee ON ee.id = tpo.num_edital_id
-        WHERE ee.`status`='0'AND ee.dt_ini_edit and ee.dt_fim_edit AND ee.dt_ini_insc AND ee.dt_fim_insc is NOT null
+        WHERE 
+            ee.`status`='0'
+            AND ee.dt_ini_edit
+            AND ee.dt_fim_edit
+            AND ee.dt_ini_insc
+            AND ee.dt_fim_insc is NOT null
+        UNION ALL
+        SELECT
+            'retificacao' AS tipo_edital,
+            tret.id,
+            tret.diretoria,
+            tret.turno,
+            tret.trimestre,
+            tret.vagas_totais,
+            tret.carga_horaria,
+            tret.carga_horaria_total,
+            tret.previsao_inicio,
+            tret.previsao_fim,
+            tret.dias_semana,
+            tret.previsao_abertura_edital,
+            tret.previsao_fechamento_edital,
+            tret.data_registro,
+            tret.situacao,
+            tret.jus_reprovacao,
+            tret.curso_id,
+            tret.eixo_id,
+            tret.modalidade_id,
+            tret.num_edital_id,
+            tret.tipo_curso_id,
+            tret.udepi_id,
+            tret.curso_tecnico,
+            tret.qualificacoes,
+            esc.escola,
+            um.municipio,
+            esc.email,
+            esc.telefone,
+            md.modalidade,
+            tc.tipo,
+            cr.curso,
+            ee.id AS 'num_edital_id',
+            ee.dt_ini_edit,
+            ee.dt_fim_edit,
+            ee.dt_ini_insc,
+            ee.dt_fim_insc,
+            ee.num_edital
+        FROM turmas_retificadas tret 
+        INNER JOIN escolas esc ON esc.id = tret.escola_id
+        LEFT JOIN udepi_municipio um ON um.escola_id = esc.id
+        INNER JOIN modalidade md ON md.id = tret.modalidade_id
+        INNER JOIN tipo_curso tc ON tc.id = tret.tipo_curso_id
+        INNER JOIN cursos cr ON cr.id = tret.curso_id
+        INNER JOIN editais_retificados ee ON ee.id = tret.num_edital_id
+        WHERE 
+            ee.`status`='0'
+            AND ee.dt_ini_edit
+            AND ee.dt_fim_edit
+            AND ee.dt_ini_insc
+            AND ee.dt_fim_insc is NOT null
     """, con=get_engine(rede))
     #turmas_planejadas = turmas_planejadas[turmas_planejadas['id']==id_]
     # turmas_planejadas.values[0]
@@ -390,12 +483,17 @@ def criaredital(rede):
         # output_path = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
 
         # save_to_word(template_bytes, output_path)
-
-        doc1 = DocxTemplate("/home/python/app/templates/edital_template.docx")
+        if resposta[r][0]['tipo_edital'] == 'retificacao':
+            doc1 = DocxTemplate("/home/python/app/templates/edital_retificacao_template.docx")
+        else:
+            doc1 = DocxTemplate("/home/python/app/templates/edital_template.docx")
         # print(doc1)
         doc1.render({'turmas_planejadas': resposta[r]})
         # print(doc1)
-        docx = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
+        if resposta[r][0]['tipo_edital'] == 'retificacao':
+            docx = unidecode(f"{OUTPUT_PATH}/edital_retificacao_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
+        else:
+            docx = unidecode(f"{OUTPUT_PATH}/edital_{resposta[r][0]['escola']}_{resposta[r][0]['num_edital']}_{agora}.docx")
         # print(docx)
         doc1.save(docx)
 
@@ -406,8 +504,9 @@ def criaredital(rede):
         ### Rotina para atualizar o path do edital em PDF ###
         engine = get_engine(rede)
         connection = engine.connect()
+        table_name = 'edital_ensino' if resposta[r][0]['tipo_edital'] == 'normal' else 'editais_retificados'
         statement = text(f"""
-                        UPDATE edital_ensino
+                        UPDATE {table_name}
                         SET
                             pdf = '{PDF_PATH}'
                         WHERE
@@ -428,7 +527,6 @@ if __name__ == '__main__':
 
         for task in tasks:
             rede = task.variables['nomeRede'].value if 'nomeRede' in task.variables else None
-            print(rede)
             criaredital(rede)
             worker.complete_task(task_id=task.id_, variables={})
             print('Inserção realizada com sucesso!')

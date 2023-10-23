@@ -16,6 +16,3 @@ unidecode = "*"
 pylint = "*"
 yapf = "*"
 pylance = "*"
-
-[requires]
-python_version = "3.8"
