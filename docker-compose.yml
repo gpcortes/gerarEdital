@@ -34,6 +34,8 @@ services:
       - ./${DJ_BACKUP}:/home/${APP_USER_NAME}/${APP_NAME}/backup
       - ./${DJ_UPLOAD}:/home/${APP_USER_NAME}/${APP_NAME}/upload
       - ./${DJ_MEDIA}:/home/${APP_USER_NAME}/${APP_NAME}/media
+      - ./${ACS_DOCS_PATH}/Ensino/gerarEdital/Editais:/home/${APP_USER_NAME}/${APP_NAME}/outputs:rw
+      - ./${ACS_DOCS_PATH}/Ensino/gerarEdital/Templates:/home/${APP_USER_NAME}/${APP_NAME}/templates:ro
       - /usr/share/zoneinfo/America/Sao_Paulo:/etc/localtime:ro
     networks:
       - default
