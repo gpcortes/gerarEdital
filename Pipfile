@@ -11,6 +11,7 @@ pandas = "*"
 caworker = "*"
 pymysql = "*"
 unidecode = "*"
+numpy = "*"
 
 [dev-packages]
 pylint = "*"
