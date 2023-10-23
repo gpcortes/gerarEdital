@@ -43,8 +43,8 @@ services:
 
 networks:
   default:
-    external: false
-    name: ${COMPOSE_PROJECT_NAME}-network
+    external: true
+    name: maestro-ensino-network
   backend:
     external: true
     name: backend
