@@ -15,6 +15,8 @@ import locale
 from unidecode import unidecode
 from jinja2 import Environment, FileSystemLoader
 
+user_name = config.APP_USER_NAME  # type: ignore
+app_name = config.APP_NAME  # type: ignore
 
 def convert_to(source, folder, timeout=None):
     args = [
@@ -455,7 +457,7 @@ def criaredital(rede):
         #     indent=4)
         # print(json_string)
 
-        BASE_DIR = '/home/python/app/outputs'
+        BASE_DIR = f'/home/{user_name}/{app_name}/outputs'
         ACS_PATH = unidecode(f"{ano_edital}/{resposta[r][0]['escola']}")
         OUTPUT_PATH = os.path.join(BASE_DIR, ACS_PATH)
 
@@ -466,7 +468,7 @@ def criaredital(rede):
         # print(type(r))
         # print(resposta[r])
         # print(r)
-        # template_path = "/home/python/app/templates/edital_template.docx"
+        # template_path = f"/home/{user_name}/{app_name}/templates/edital_template.docx"
 
         # data = {'turmas_planejadas': resposta[r]}
 
@@ -478,10 +480,10 @@ def criaredital(rede):
         # save_to_word(template_bytes, output_path)
         if resposta[r][0]['tipo_edital'] == 'retificacao':
             doc1 = DocxTemplate(
-                "/home/python/app/templates/edital_retificacao_template.docx")
+                f"/home/{user_name}/{app_name}/templates/edital_retificacao_template.docx")
         else:
             doc1 = DocxTemplate(
-                "/home/python/app/templates/edital_template.docx")
+                f"/home/{user_name}/{app_name}/templates/edital_template.docx")
         # print(doc1)
         doc1.render({'turmas_planejadas': resposta[r]})
         # print(doc1)
