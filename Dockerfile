@@ -52,4 +52,5 @@ USER $APP_USER_NAME
 
 WORKDIR /home/$APP_USER_NAME/$APP_NAME
 
-CMD [ "python", "main.py" ]
+# CMD [ "python", "main.py" ]
+CMD [ "tail", "-f", "/dev/null"]
