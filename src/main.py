@@ -217,6 +217,7 @@ def criaredital(rede):
             ee.`status`='0'
             AND ee.dt_fim_insc is NOT null
     """, con=get_engine(rede))
+
     # turmas_planejadas = turmas_planejadas[turmas_planejadas['id']==id_]
     # turmas_planejadas.values[0]
     # turmas_planejadas['previsao_abertura_edital'] = datetime.strftime(
@@ -280,7 +281,7 @@ def criaredital(rede):
             ]),  # type: ignore
         '%d de %B de %Y') if turmas_planejadas['data_resultado_final'].values[0] is not None else default_date
 
-    content = turmas_planejadas.to_dict('records')
+    content = turmas_planejadas.set_index('id').to_dict('records')
 
     # result_json = turmas_planejadas.to_json(orient="index")
 
