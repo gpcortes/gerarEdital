@@ -486,7 +486,8 @@ def criaredital(rede):
             doc1 = DocxTemplate(
                 f"/home/{user_name}/{app_name}/templates/edital_template.docx")
         # print(doc1)
-        doc1.render({'turmas_planejadas': resposta[r]})
+        dic_render = {'turmas_retificadas': resposta[r]} if resposta[r][0]['tipo_edital'] == 'retificacao' else {'turmas_planejadas': resposta[r]}
+        doc1.render(dic_render)
         # print(doc1)
         if resposta[r][0]['tipo_edital'] == 'retificacao':
             docx = unidecode(
