@@ -28,4 +28,5 @@
     "python.linting.pylintEnabled": false,
     "python.formatting.yapfPath": "/home/python/app/.venv/bin/yapf",
     "python.formatting.provider": "yapf",
+    "GitHooks.hooksDirectory": "/home/gpcortes/projects/gerarEdital/.git/hooks",
 }
